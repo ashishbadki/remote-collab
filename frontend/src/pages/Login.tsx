@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { Logo } from "../components/Logo";
 
 const Login = () => {
   const { login } = useAuth();
@@ -18,7 +17,7 @@ const Login = () => {
     try {
       await login(email, password);
       navigate("/dashboard");
-    } catch (err) {
+    } catch {
       alert("Login failed");
     } finally {
       setLoading(false);
@@ -26,96 +25,124 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f8ff] flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Link to="/">
-              <Logo></Logo>
-            </Link>
-          </div>
-    
-          <p className="mt-2 text-gray-600">Welcome back! Please log in to your account</p>
+    <div
+      className="min-h-screen bg-[#f6f8ff] flex items-center justify-center"
+      style={{
+        fontFamily:
+          "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+      }}
+    >
+      <div className="w-full flex flex-col items-center">
+
+        {/* Logo + Heading */}
+        <div className="flex items-center gap-2 mb-1">
+          <Link to="/" className="flex items-center gap-2 no-underline">
+            <div className="w-7 h-7 bg-[#5b5cf0] rounded-md flex items-center justify-center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2L4 20l8-4 8 4L12 2z" />
+              </svg>
+            </div>
+            <span className="text-[24px] font-semibold text-[#5b5cf0]">
+              RemoteCollab
+            </span>
+          </Link>
         </div>
 
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8">
-          {/* Email Field */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              placeholder="john@example.com"
-              required
-            />
-          </div>
+        {/* Subtitle */}
+        <p className="text-[13px] text-gray-700 mb-6">
+          Welcome back! Please log in to your account
+        </p>
 
-          {/* Password Field */}
-          <div className="mb-6">
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <Link
-                to="/forgot-password"
-                className="text-sm text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              placeholder="••••••••"
-              required
-            />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="w-[350px]">
+
+          {/* Email */}
+          <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
+            Email Address
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="john@example.com"
+            required
+            className="w-full h-[34px] px-3 bg-white
+                       border border-gray-300 rounded-md
+                       text-[13px] text-gray-800 mb-3
+                       focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
+          />
+
+          {/* Password */}
+          <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+            className="w-full h-[34px] px-3 bg-white
+                       border border-gray-300 rounded-md
+                       text-[13px] text-gray-800 mb-2
+                       focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
+          />
+
+          {/* Forgot password */}
+          <div className="text-right mb-4">
+            <Link
+              to="/forgot-password"
+              className="text-[12px] text-[#5b5cf0] hover:underline"
+            >
+              Forgot password?
+            </Link>
           </div>
 
           {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-[34px] bg-[#5b5cf0] text-white
+                       text-[12px] font-medium rounded-md
+                       hover:bg-[#4a4be0] transition mb-5
+                       disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Logging in..." : "Log In"}
           </button>
 
           {/* Divider */}
-          <div className="my-8 flex items-center">
+          <div className="flex items-center mb-4">
             <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-4 text-sm text-gray-500">Or continue with</span>
+            <span className="px-2 text-[12px] text-gray-500">
+              Or continue with
+            </span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
           {/* Google Button */}
           <button
             type="button"
-            className="w-full py-3 border border-gray-300 rounded-xl font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-3"
+            className="w-full h-[34px] bg-white
+                       border border-gray-300 rounded-md
+                       text-[12px] font-medium text-gray-900
+                       flex items-center justify-center gap-2
+                       hover:bg-gray-50 transition mb-5"
           >
-            <div className="w-5 h-5 bg-red-500 rounded-full"></div>
+            <span className="font-bold text-[14px]">G</span>
             Google
           </button>
 
-          {/* Sign Up Link */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-indigo-600 font-medium hover:text-indigo-500"
-              >
-                Sign up
-              </Link>
-            </p>
-          </div>
+          {/* Signup */}
+          <p className="text-center text-[12px] text-gray-700">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-[#5b5cf0] font-medium hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
+
         </form>
       </div>
     </div>
