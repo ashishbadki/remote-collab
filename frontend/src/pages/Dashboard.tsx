@@ -1,146 +1,72 @@
-import { useEffect, useRef, useState } from "react";
-import { getProfileApi } from "../api/user.api";
-import profileImg from "../assets/profile_img.avif";
-import { Rocket } from "lucide-react";
-
-const Logo = () => {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center">
-        <Rocket className="text-white w-5 h-5" />
-      </div>
-      <span className="text-xl font-semibold text-indigo-600">
-        RemoteCollab
-      </span>
-    </div>
-  );
-};
-
+// pages/Dashboard.tsx - Complete refined dashboard
+import Navbar from "../components/Navbar";
+import CreateWorkspace from "../components/CreateWorkspace";
+import WorkspaceList from "../components/allWorkspaceList";
+import Footer from "../components/Footer";
 const Dashboard = () => {
-  const [profile, setProfile] = useState<{ name: string; email: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const data = await getProfileApi();
-        setProfile(data);
-      } catch (error) {
-        alert("Session expired. Please login again.");
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center text-gray-500">
-        Loading profile...
-      </div>
-    );
-  }
+        <div className="min-h-screen bg-gray-50">
 
-  return (
-    <div className="min-h-screen bg-gray-50">
+            <header>
+                <Navbar />
+            </header>
 
-      <header className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Logo />
-
-          <div className="relative" ref={dropdownRef}>
-            <img
-              src={profileImg}
-              alt="Profile"
-              onClick={() => setOpen(!open)}
-              className="w-9 h-9 rounded-xl object-cover border cursor-pointer
-                         hover:ring-2 hover:ring-indigo-500 transition"
-            />
-
-            {open && (
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl
-                              shadow-lg border z-50">
-                {/* User Info */}
-                <div className="px-4 py-3 border-b">
-                  <p className="text-sm font-medium text-gray-800">
-                    {profile?.name}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {profile?.email}
-                  </p>
+            <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                {/* Header Section */}
+                <div className="mb-8">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
+                                Welcome back, John!
+                            </h1>
+                            <p className="mt-2 text-sm text-gray-600 sm:text-base">
+                                Pick up where you left off. Select a workspace to continue collaborating with your team.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Menu */}
-                <div className="py-2">
-                  <button
-                    className="w-full text-left px-4 py-2 text-sm
-                               text-gray-700 hover:bg-gray-100"
-                  >
-                    Profile
-                  </button>
-
-                  <button
-                    className="w-full text-left px-4 py-2 text-sm
-                               text-gray-700 hover:bg-gray-100"
-                  >
-                    Settings
-                  </button>
+                {/* Join Workspace Banner */}
+                <div className="mb-8 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600">
+                    <div className="p-6 sm:p-8">
+                        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
+                            <div className="mb-4 sm:mb-0 sm:mr-6">
+                                <h3 className="mb-2 text-xl font-semibold text-white">Join a Workspace</h3>
+                                <p className="max-w-md text-indigo-100">
+                                    Accept an invitation link to collaborate with existing teams and projects
+                                </p>
+                            </div>
+                            <button className="inline-flex items-center rounded-lg bg-white px-5 py-3 text-sm 
+                                             font-semibold text-indigo-600 shadow-sm hover:bg-gray-50">
+                                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                                Join Workspace
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Logout */}
-                <div className="border-t">
-                  <button
-                    onClick={() => {
-                      localStorage.removeItem("token");
-                      window.location.href = "/login";
-                    }}
-                    className="w-full text-left px-4 py-2 text-sm
-                               text-red-600 hover:bg-red-50"
-                  >
-                    Logout
-                  </button>
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    {/* Create Workspace Panel */}
+                    <div className="lg:col-span-1">
+                        <CreateWorkspace />
+                        
+                    </div>
+
+                    {/* Workspaces List */}
+                    <div className="lg:col-span-2">
+                        <WorkspaceList />
+                    </div>
                 </div>
-              </div>
-            )}
-          </div>
+            </main>
+
+            <footer>
+                <Footer/>
+            </footer>
         </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-6 py-10">
-  <div className="text-center">
-    <h2 className="text-3xl font-semibold text-gray-900">
-      Welcome back, <span className="text-indigo-600">{profile?.name}</span> 👋
-    </h2>
-
-    <p className="mt-3 text-base text-gray-600 max-w-2xl mx-auto">
-      Pick up where you left off. Select a workspace to continue collaborating
-      with your team.
-    </p>
-  </div>
-</main>
-
-    </div>
-  );
+    );
 };
 
 export default Dashboard;
