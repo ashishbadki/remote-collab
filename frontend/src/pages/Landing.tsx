@@ -27,7 +27,6 @@ const Landing = () => {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="text-center py-24 px-4">
         <h1 className="text-5xl md:text-6xl font-bold text-gray-900 max-w-4xl mx-auto leading-tight">
           Complete Collaboration Platform for Remote Teams
@@ -52,7 +51,6 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Features */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-6">
           <Feature

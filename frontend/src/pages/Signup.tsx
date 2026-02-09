@@ -45,7 +45,6 @@ const Signup = () => {
     >
       <div className="w-full flex flex-col items-center">
 
-        {/* Logo + Heading */}
         <div className="flex items-center gap-2 mb-1">
           <Link to="/" className="flex items-center gap-2 no-underline">
             <div className="w-7 h-7 bg-[#5b5cf0] rounded-md flex items-center justify-center">
@@ -65,10 +64,8 @@ const Signup = () => {
           Create your free account to get started
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="w-[350px]">
 
-          {/* Full Name */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Full Name
           </label>
@@ -84,7 +81,6 @@ const Signup = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Email */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Email Address
           </label>
@@ -100,7 +96,6 @@ const Signup = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Password */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Password
           </label>
@@ -116,7 +111,6 @@ const Signup = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Confirm Password */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Confirm Password
           </label>
@@ -132,14 +126,12 @@ const Signup = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Error message */}
           {errorMessage && (
             <p className="text-red-500 text-[12px] mb-3 text-center">
               {errorMessage}
             </p>
           )}
 
-          {/* Signup Button */}
           <button
             type="submit"
             disabled={loading}
@@ -151,7 +143,6 @@ const Signup = () => {
             {loading ? "Creating account..." : "Create Account"}
           </button>
 
-          {/* Divider */}
           <div className="flex items-center mb-4">
             <div className="flex-1 border-t border-gray-300"></div>
             <span className="px-2 text-[12px] text-gray-500">
@@ -160,7 +151,6 @@ const Signup = () => {
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
-          {/* Google Button */}
           <button
             type="button"
             className="w-full h-[34px] bg-white
@@ -173,7 +163,6 @@ const Signup = () => {
             Google
           </button>
 
-          {/* Login */}
           <p className="text-center text-[12px] text-gray-700">
             Already have an account?{" "}
             <Link

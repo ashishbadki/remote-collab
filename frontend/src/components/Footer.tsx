@@ -5,9 +5,7 @@ const Footer = () => {
     return (
         <footer className="mt-16 border-t bg-white">
             <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                {/* Main Footer Content */}
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-                    {/* Brand and Description */}
                     <div className="lg:col-span-2">
                         <div className="flex items-center">
                             <div className="text-2xl font-bold text-gray-900">RemoteCollab</div>
@@ -53,7 +51,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Product Links */}
+                   
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900">Product</h3>
                         <ul className="mt-4 space-y-3">
@@ -85,7 +83,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Company Links */}
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900">Company</h3>
                         <ul className="mt-4 space-y-3">
@@ -117,7 +114,6 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Support Links */}
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900">Support</h3>
                         <ul className="mt-4 space-y-3">

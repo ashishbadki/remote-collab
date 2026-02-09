@@ -84,13 +84,12 @@ const Navbar = () => {
 
                 {open && (
                   <div className="absolute right-0 mt-2 w-64 origin-top-right divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none animate-in fade-in slide-in-from-top-1">
-                    {/* User Info */}
+
                     <div className="px-4 py-3">
                       <p className="text-sm font-semibold text-gray-900">{profile?.name}</p>
                       <p className="text-sm text-gray-500 truncate">{profile?.email}</p>
                     </div>
 
-                    {/* Menu Items */}
                     <div className="py-1">
                       <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                         <svg className="mr-3 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,7 +106,6 @@ const Navbar = () => {
                       </a>
                     </div>
 
-                    {/* Logout */}
                     <div className="py-1">
                       <button
                         onClick={() => {

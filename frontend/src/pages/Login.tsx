@@ -34,7 +34,6 @@ const Login = () => {
     >
       <div className="w-full flex flex-col items-center">
 
-        {/* Logo + Heading */}
         <div className="flex items-center gap-2 mb-1">
           <Link to="/" className="flex items-center gap-2 no-underline">
             <div className="w-7 h-7 bg-[#5b5cf0] rounded-md flex items-center justify-center">
@@ -48,15 +47,12 @@ const Login = () => {
           </Link>
         </div>
 
-        {/* Subtitle */}
         <p className="text-[13px] text-gray-700 mb-6">
           Welcome back! Please log in to your account
         </p>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="w-[350px]">
 
-          {/* Email */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Email Address
           </label>
@@ -72,7 +68,6 @@ const Login = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Password */}
           <label className="block text-[12px] font-medium text-gray-800 mb-1 text-center">
             Password
           </label>
@@ -88,7 +83,6 @@ const Login = () => {
                        focus:outline-none focus:ring-1 focus:ring-[#5b5cf0] focus:border-[#5b5cf0]"
           />
 
-          {/* Forgot password */}
           <div className="text-right mb-4">
             <Link
               to="/forgot-password"
@@ -98,7 +92,6 @@ const Login = () => {
             </Link>
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}
@@ -110,7 +103,6 @@ const Login = () => {
             {loading ? "Logging in..." : "Log In"}
           </button>
 
-          {/* Divider */}
           <div className="flex items-center mb-4">
             <div className="flex-1 border-t border-gray-300"></div>
             <span className="px-2 text-[12px] text-gray-500">
@@ -119,7 +111,6 @@ const Login = () => {
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
 
-          {/* Google Button */}
           <button
             type="button"
             className="w-full h-[34px] bg-white
@@ -132,7 +123,6 @@ const Login = () => {
             Google
           </button>
 
-          {/* Signup */}
           <p className="text-center text-[12px] text-gray-700">
             Don't have an account?{" "}
             <Link

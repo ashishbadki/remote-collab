@@ -12,7 +12,6 @@ export const getAllWorkspace = async (
     const workspaces = await Workspace.find({
       owner: userId,
     });
-
     return res.status(200).json({
       success: true,
       workspaces,
