@@ -1,12 +1,13 @@
 // components/allWorkspaceList.tsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {InviteLinkBody} from "./InviteLinkBody";
 
 export interface Workspace {
   _id: string;
   name: string;
   type: string;
-  members?: number;
+  members?: Array<{ userId: string; role: string; _id?: string }>;
   channels?: number;
 }
 
@@ -191,7 +192,7 @@ const WorkspaceList = ({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-gray-900">{ws.members ?? 0}</p>
+                      <p className="text-2xl font-bold text-gray-900">{ws.members?.length ?? 0}</p>
                       <p className="text-xs text-gray-500">Members</p>
                     </div>
                   </div>
@@ -340,6 +341,7 @@ const WorkspaceList = ({
       </AnimatePresence>
 
       {/* Add Members Modal - Optional (you can implement this later) */}
+      
       <AnimatePresence>
         {showAddMembers && (
           <motion.div
@@ -353,39 +355,30 @@ const WorkspaceList = ({
               initial={{ scale: 0.95, opacity: 0, y: 10 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 10 }}
-              className="w-full max-w-sm overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl"
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-sm rounded-2xl border border-gray-200 bg-white shadow-xl"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Header */}
               <div className="border-b border-gray-100 p-5">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-cyan-50">
-                    <svg className="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Add Members</h3>
-                    <p className="text-sm text-gray-500">Invite people to collaborate</p>
-                  </div>
-                </div>
-              </div>
-              <div className="p-5">
-                <p className="mb-4 text-sm text-gray-600 text-center">
-                  Add members functionality would go here.
-                  <br />
-                  This is a placeholder modal.
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Invite Members
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Share this link to invite people
                 </p>
-                <button
-                  onClick={() => setShowAddMembers(null)}
-                  className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-3 py-2.5 text-sm font-semibold text-white hover:from-blue-600 hover:to-cyan-600 transition-colors"
-                >
-                  Close
-                </button>
               </div>
+
+              {/* Body */}
+              <InviteLinkBody
+                workspaceId={showAddMembers}
+                onClose={() => setShowAddMembers(null)}
+              />
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
     </>
   );
 };

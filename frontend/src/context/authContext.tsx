@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         const data = await getProfileApi();
-        setUser(data);
+        setUser(data.user);
         setIsAuthenticated(true);
       } catch (error) {
         removeToken();

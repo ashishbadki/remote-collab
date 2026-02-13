@@ -7,8 +7,9 @@ import cors from "cors";
 import { connectDB } from "./config/db";
 
 import authRoutes from "./routes/authRoutes";
-import profileRoute from "./routes/profileRoute";
+import userRoutes from "./routes/userRoutes";
 import workspaceRoutes from "./routes/workspaceRoutes";
+import inviteRoutes from "./routes/inviteRoutes";
 
 const app = express();
 
@@ -23,8 +24,12 @@ app.use(
 
 connectDB();
 
-app.use("/api/v1/auth", authRoutes, profileRoute);
+app.use("/api/v1/auth", authRoutes);
+
+app.use("/api/v1/user", userRoutes);
 
 app.use("/api/v1/workspace", workspaceRoutes);
+
+app.use("/api/v1/invite", inviteRoutes);
 
 export default app;

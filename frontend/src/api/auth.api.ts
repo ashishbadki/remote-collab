@@ -9,14 +9,14 @@ export const SignupApi = async (
   confirmPassword: string
 ) => {
   try{
-    const res = await axios.post(`${API_URL}/signup`, {
+    const { data } = await axios.post(`${API_URL}/signup`, {
       name,
       email,
       password,
       confirmPassword,
     });
 
-    return res.data;
+    return data;
   } 
   catch (error: any){
     throw error;
@@ -25,10 +25,10 @@ export const SignupApi = async (
 
 
 export const LoginApi = async (email: string, password: string) =>{
-    const res = await axios.post(`${API_URL}/login`,{
-        email,
-        password
+    const { data } = await axios.post(`${API_URL}/login`,{
+      email,
+      password
     })
-    return res.data;
+    return data;
 
 }

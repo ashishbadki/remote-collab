@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { profile } from "../controllers/user.controller";  
+import { profile } from "../controllers/userController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
-const router = Router();    
+const router = Router();
 
 router.get("/profile", authMiddleware, profile);
 

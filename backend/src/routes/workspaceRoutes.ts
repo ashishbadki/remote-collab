@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { createWorkspace } from "../controllers/createWorkspace";
-import { getAllWorkspace } from "../controllers/getAllWorkspace";
-import { deleteWorkspace } from "../controllers/deleteWorkspace";
+import { createWorkspace, getAllWorkspace, deleteWorkspace } from "../controllers/workspaceController";
 
 const router = Router();
       
