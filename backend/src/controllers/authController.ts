@@ -59,6 +59,11 @@ export const signup = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      },
       message: "User signed up successfully",
     });
   } catch (error) {
@@ -116,6 +121,11 @@ export const login = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      },
       message: "User logged in successfully",
     });
 

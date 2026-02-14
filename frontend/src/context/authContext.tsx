@@ -66,7 +66,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setToken(data.token);
-    setUser(data.user);
+
+    // Fetch user profile immediately after login to ensure we have the full user object including name
+    try {
+      const profileData = await getProfileApi();
+      setUser(profileData.user);
+    } catch (error) {
+      console.error("Failed to fetch user profile after login", error);
+      // Fallback to basic user data if profile fetch fails, though unlikely if token works
+      setUser(data.user);
+    }
+
     setIsAuthenticated(true);
   };
 
@@ -84,7 +94,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setToken(data.token);
-    setUser(data.user);
+
+    // Fetch user profile immediately after signup to ensure we have the full user object including name
+    try {
+      const profileData = await getProfileApi();
+      setUser(profileData.user);
+    } catch (error) {
+      console.error("Failed to fetch user profile after signup", error);
+      // Fallback
+      setUser(data.user);
+    }
+
     setIsAuthenticated(true);
   };
 

@@ -23,6 +23,7 @@ export const profile = async (req: AuthRequest, res: Response) => {
     return res.status(200).json({
       success: true,
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
       },

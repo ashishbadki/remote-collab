@@ -1,16 +1,9 @@
 // components/allWorkspaceList.tsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {InviteLinkBody} from "./InviteLinkBody";
+import { InviteLinkBody } from "./InviteLinkBody";
 import { useAuth } from "../context/authContext";
-export interface Workspace {
-  _id: string;
-  name: string;
-  type: string;
-  owner: string; // user id of the workspace owner
-  members?: Array<{ userId: string; role: string; _id?: string }>;
-  channels?: number;
-}
+import type { Workspace } from "../types/workspace";
 
 type WorkspaceListProps = {
   workspaces: Workspace[];
@@ -32,7 +25,7 @@ const WorkspaceList = ({
 
   const handleDeleteClick = async (id: string, workspaceName: string) => {
     if (confirmText !== `delete ${workspaceName}`) return;
-    
+
     setDeletingId(id);
     try {
       await onDelete(id);
@@ -69,7 +62,7 @@ const WorkspaceList = ({
 
   if (workspaces.length === 0) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl border border-dashed border-gray-300 bg-white/50 p-12 text-center backdrop-blur-sm"
@@ -319,7 +312,7 @@ const WorkspaceList = ({
                 </div>
 
                 {/* Action Buttons - Side by Side */}
-                { /* determine ownership to guard delete */ }
+                { /* determine ownership to guard delete */}
                 {(() => {
                   const isOwner = user?._id === workspaceToDelete.owner;
                   return (
@@ -374,7 +367,7 @@ const WorkspaceList = ({
       </AnimatePresence>
 
       {/* Add Members Modal - Optional (you can implement this later) */}
-      
+
       <AnimatePresence>
         {showAddMembers && (
           <motion.div

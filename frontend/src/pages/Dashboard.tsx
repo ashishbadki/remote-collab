@@ -6,15 +6,7 @@ import CreateWorkspace from "../components/CreateWorkspace";
 import WorkspaceList from "../components/allWorkspaceList";
 import { useAuth } from "../context/authContext";
 import { getAllWorkspacesApi, deleteWorkspaceApi, joinWorkspaceApi } from "../api/workspace.api";
-
-// Updated Workspace interface to match what WorkspaceList expects
-export interface Workspace {
-  _id: string;
-  name: string;
-  type: string;
-  members?: Array<{ userId: string; role: string; _id?: string }>;
-  channels?: number;
-}
+import type { Workspace } from "../types/workspace";
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -35,11 +27,11 @@ const Dashboard = () => {
       setWorkspaceLoading(true);
       const data = await getAllWorkspacesApi();
       setWorkspaces(data.workspaces);
-      
+
       // Calculate statistics
       const totalMembers = data.workspaces.reduce((sum: number, ws: Workspace) => sum + (ws.members?.length || 0), 0);
       const totalChannels = data.workspaces.reduce((sum: number, ws: Workspace) => sum + (ws.channels || 0), 0);
-      
+
       setStats({
         totalMembers,
         totalChannels
@@ -108,7 +100,7 @@ const Dashboard = () => {
             </h1>
             <p className="mt-1 text-sm text-gray-600">Manage your workspaces and collaborate with your team</p>
           </div>
-          <button 
+          <button
             onClick={() => setShowJoinModal(true)}
             className="h-fit rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-5 py-2 font-semibold text-sm text-white shadow-lg hover:shadow-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 whitespace-nowrap"
           >
@@ -119,8 +111,8 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <CreateWorkspace onCreated={fetchWorkspaces} />
-            
-         
+
+
           </div>
 
           <div className="lg:col-span-2">
@@ -130,7 +122,7 @@ const Dashboard = () => {
                 <div className="text-xs text-gray-500 font-medium">
                   {workspaces.length} workspace{workspaces.length !== 1 ? 's' : ''}
                 </div>
-                <button 
+                <button
                   onClick={fetchWorkspaces}
                   className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
                 >
@@ -138,7 +130,7 @@ const Dashboard = () => {
                 </button>
               </div>
             </div>
-            
+
             <WorkspaceList
               workspaces={workspaces}
               loading={workspaceLoading}
@@ -222,8 +214,8 @@ const Dashboard = () => {
                     >
                       {joinLoading ? (
                         <>
-                          <motion.span 
-                            animate={{ rotate: 360 }} 
+                          <motion.span
+                            animate={{ rotate: 360 }}
                             transition={{ duration: 1, repeat: Infinity }}
                             className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                           />
