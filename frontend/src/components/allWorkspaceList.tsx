@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {InviteLinkBody} from "./InviteLinkBody";
-
+import { useAuth } from "../context/authContext";
 export interface Workspace {
   _id: string;
   name: string;
   type: string;
+  owner: string; // user id of the workspace owner
   members?: Array<{ userId: string; role: string; _id?: string }>;
   channels?: number;
 }
@@ -22,6 +23,7 @@ const WorkspaceList = ({
   loading,
   onDelete,
 }: WorkspaceListProps) => {
+  const { user } = useAuth();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -42,7 +44,11 @@ const WorkspaceList = ({
     }
   };
 
-  const handleAddMembers = (workspaceId: string) => {
+  const handleAddMembers = (workspaceId: string, ownerId: string) => {
+    if (user && user._id !== ownerId) {
+      alert("Only the workspace owner can invite members");
+      return;
+    }
     setShowAddMembers(workspaceId);
     setOpenMenuId(null);
     // In a real app, this would open a modal or navigate to a members page
@@ -143,8 +149,10 @@ const WorkspaceList = ({
                         >
                           {/* Add Members Button */}
                           <button
-                            onClick={() => handleAddMembers(ws._id)}
-                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors group"
+                            onClick={() => handleAddMembers(ws._id, ws.owner)}
+                            disabled={!(user && user._id === ws.owner)}
+                            title={user && user._id !== ws.owner ? "Only owner can invite" : undefined}
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors group disabled:opacity-50"
                           >
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-100 to-cyan-100 group-hover:from-blue-200 group-hover:to-cyan-200">
                               <svg className="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,10 +170,16 @@ const WorkspaceList = ({
                           {/* Delete Workspace Button */}
                           <button
                             onClick={() => {
-                              setDeleteConfirmId(ws._id);
                               setOpenMenuId(null);
+                              if (user && user._id === ws.owner) {
+                                setDeleteConfirmId(ws._id);
+                              } else {
+                                alert("Only the workspace owner can delete this workspace");
+                              }
                             }}
-                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors group"
+                            disabled={!(user && user._id === ws.owner)}
+                            title={user && user._id !== ws.owner ? "Only owner can delete" : undefined}
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors group disabled:opacity-50"
                           >
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-red-100 to-orange-100 group-hover:from-red-200 group-hover:to-orange-200">
                               <svg className="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -210,9 +224,11 @@ const WorkspaceList = ({
                 </div>
 
                 {/* Action Button */}
-                <button className="w-full rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50 py-3 text-sm font-semibold text-indigo-700 hover:from-indigo-100 hover:to-purple-100 transition-all duration-300 group-hover:shadow-sm">
+                {/* Action Button */}
+                <button>
                   Open Workspace
                 </button>
+
               </div>
             </motion.div>
           ))}
@@ -266,7 +282,7 @@ const WorkspaceList = ({
                       <div className="flex items-center gap-1 text-xs text-gray-500">
                         <span className="capitalize">{workspaceToDelete.type}</span>
                         <span>•</span>
-                        <span>{workspaceToDelete.members ?? 0} members</span>
+                        <span>{Array.isArray(workspaceToDelete.members) ? workspaceToDelete.members.length : 0} members</span>
                       </div>
                     </div>
                   </div>
@@ -303,32 +319,49 @@ const WorkspaceList = ({
                 </div>
 
                 {/* Action Buttons - Side by Side */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      setDeleteConfirmId(null);
-                      setConfirmText("");
-                    }}
-                    disabled={deletingId === workspaceToDelete._id}
-                    className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => handleDeleteClick(workspaceToDelete._id, workspaceToDelete.name)}
-                    disabled={deletingId === workspaceToDelete._id || confirmText !== `delete ${workspaceToDelete.name}`}
-                    className="flex-1 rounded-lg bg-gradient-to-r from-red-500 to-orange-500 px-3 py-2.5 text-sm font-semibold text-white hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {deletingId === workspaceToDelete._id ? (
-                      <span className="inline-flex items-center justify-center gap-1.5">
-                        <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-                        Deleting...
-                      </span>
-                    ) : (
-                      "Delete"
-                    )}
-                  </button>
-                </div>
+                { /* determine ownership to guard delete */ }
+                {(() => {
+                  const isOwner = user?._id === workspaceToDelete.owner;
+                  return (
+                    <>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setDeleteConfirmId(null);
+                            setConfirmText("");
+                          }}
+                          disabled={deletingId === workspaceToDelete._id}
+                          className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(workspaceToDelete._id, workspaceToDelete.name)}
+                          disabled={
+                            deletingId === workspaceToDelete._id ||
+                            confirmText !== `delete ${workspaceToDelete.name}` ||
+                            !isOwner
+                          }
+                          className="flex-1 rounded-lg bg-gradient-to-r from-red-500 to-orange-500 px-3 py-2.5 text-sm font-semibold text-white hover:from-red-600 hover:to-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                          {deletingId === workspaceToDelete._id ? (
+                            <span className="inline-flex items-center justify-center gap-1.5">
+                              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                              Deleting...
+                            </span>
+                          ) : (
+                            "Delete"
+                          )}
+                        </button>
+                      </div>
+                      {!isOwner && (
+                        <p className="mt-2 text-xs text-red-600">
+                          Only the workspace owner can delete this workspace.
+                        </p>
+                      )}
+                    </>
+                  );
+                })()}
 
                 {/* Final Note */}
                 <p className="mt-3 text-center text-xs text-gray-500">
