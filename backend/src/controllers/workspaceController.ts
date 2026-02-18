@@ -102,3 +102,53 @@ export const deleteWorkspace = async (req: AuthRequest, res: Response) => {
   }
 };
 
+export const getWorkspaceById = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.userId;
+    const { workspaceId } = req.params;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const workspace = await Workspace.findById(workspaceId);
+
+    if (!workspace) {
+      return res.status(404).json({
+        success: false,
+        message: "Workspace not found",
+      });
+    }
+
+    // Check if user is owner or member
+    const isMember =
+      workspace.owner.toString() === userId ||
+      (workspace.members &&
+        workspace.members.some(
+          (member) => member.userId && member.userId.toString() === userId
+        ));
+
+    if (!isMember) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not a member of this workspace",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Workspace fetched successfully",
+      workspace,
+    });
+  } catch (error) {
+    console.error("Get workspace by id error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch workspace",
+    });
+  }
+};
+

@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes";
 import workspaceRoutes from "./routes/workspaceRoutes";
 import inviteRoutes from "./routes/inviteRoutes";
 import channelRoutes from "./routes/channelRoutes";
+import messageRoutes from "./routes/message.route";
 
 const app = express();
 
@@ -34,4 +35,6 @@ app.use("/api/v1/workspace", workspaceRoutes);
 app.use("/api/v1/invite", inviteRoutes);
 
 app.use("/api/v1/channel", channelRoutes);
+
+app.use("/api/v1/messages", messageRoutes);
 export default app;

@@ -58,3 +58,15 @@ export const joinWorkspaceApi = async (token: string) => {
 
   return res.data;
 };
+
+export const getWorkspaceByIdApi = async (workspaceId: string) => {
+  const token = getToken();
+
+  const { data } = await axios.get(`${API_URL}/${workspaceId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};

@@ -22,6 +22,7 @@ type AuthContextType = {
     confirmPassword: string
   ) => Promise<void>;
   logout: () => void;
+  token: string | null;
 };
 
 
@@ -124,6 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         signup,
         logout,
+        token: getToken(),
       }}
     >
       {children}
