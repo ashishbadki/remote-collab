@@ -30,10 +30,16 @@ export const getMessages = async (req: AuthRequest, res: Response) => {
             }
         });
 
-        return res.status(200).json({ message: decryptedMessages });
+        return res.status(200).json({
+            success: true,
+            messages: decryptedMessages
+        });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
 }
 
@@ -46,13 +52,19 @@ export const deleteMessage = async (req: AuthRequest, res: Response) => {
         const message = await Message.findById(messageId);
 
         if (!message) {
-            return res.status(404).json({ message: "Message not found" });
+            return res.status(404).json({
+                success: false,
+                message: "Message not found"
+            });
         }
 
         // Check if user is the sender
         if (message.sender.toString() === userId) {
             await Message.findByIdAndDelete(messageId);
-            return res.status(200).json({ message: "Message deleted successfully" });
+            return res.status(200).json({
+                success: true,
+                message: "Message deleted successfully"
+            });
         }
 
         // Check if user is admin/owner of the workspace
@@ -61,7 +73,10 @@ export const deleteMessage = async (req: AuthRequest, res: Response) => {
         const workspace = await Workspace.findById(message.workspaceId);
 
         if (!workspace) {
-            return res.status(404).json({ message: "Workspace not found" });
+            return res.status(404).json({
+                success: false,
+                message: "Workspace not found"
+            });
         }
 
         const isOwner = workspace.owner.toString() === userId;
@@ -69,13 +84,22 @@ export const deleteMessage = async (req: AuthRequest, res: Response) => {
 
         if (isOwner || isAdmin) {
             await Message.findByIdAndDelete(messageId);
-            return res.status(200).json({ message: "Message deleted successfully" });
+            return res.status(200).json({
+                success: true,
+                message: "Message deleted successfully"
+            });
         }
 
-        return res.status(403).json({ message: "You are not authorized to delete this message" });
+        return res.status(403).json({
+            success: false,
+            message: "You are not authorized to delete this message"
+        });
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
 }

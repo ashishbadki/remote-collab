@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useSocket } from "../context/SocketContext";
-import { useAuth } from "../context/authContext";
-import axios from "axios";
-import { deleteMessageApi } from "../api/message.api";
+import { useAuth } from "../context/AuthContext";
+
+import { deleteMessageApi, getMessagesByChannelApi } from "../api/message.api";
 import { Search, MoreVertical, Phone, Video, Smile, Paperclip, Mic, Send, CheckCheck, Trash2 } from "lucide-react";
 
 type ChatAreaProps = {
@@ -38,16 +38,9 @@ export const ChatArea = ({ channelName, channelId, workspaceId, canDeleteAnyMess
         const fetchMessages = async () => {
             if (!channelId || !token) return;
             try {
-                const response = await axios.get(
-                    `http://localhost:3000/api/v1/messages/${channelId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
-                if (response.data.message) {
-                    setMessages(response.data.message);
+                const data = await getMessagesByChannelApi(channelId);
+                if (data.message) {
+                    setMessages(data.message);
                 }
             } catch (error) {
                 console.error("Failed to fetch messages:", error);

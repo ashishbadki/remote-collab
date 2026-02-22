@@ -105,6 +105,49 @@ router.get("/my", authMiddleware, getAllWorkspace);
 /**
  * @swagger
  * /api/v1/workspace/{workspaceId}:
+ *   get:
+ *     summary: Get workspace by ID
+ *     tags: [Workspace]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: workspaceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The workspace ID
+ *     responses:
+ *       200:
+ *         description: Workspace details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 workspace:
+ *                   $ref: '#/components/schemas/Workspace'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Workspace not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get("/:workspaceId", authMiddleware, getWorkspaceById);
+
+/**
+ * @swagger
+ * /api/v1/workspace/{workspaceId}:
  *   delete:
  *     summary: Delete a workspace
  *     tags: [Workspace]
@@ -150,7 +193,6 @@ router.get("/my", authMiddleware, getAllWorkspace);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/:workspaceId", authMiddleware, getWorkspaceById);
-router.delete("/:workspaceId", authMiddleware, deleteWorkspace)
+router.delete("/:workspaceId", authMiddleware, deleteWorkspace);
 
 export default router;

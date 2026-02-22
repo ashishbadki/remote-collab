@@ -123,6 +123,54 @@ router.post("/create/:workspaceId", authMiddleware, createChannel);
  */
 router.get("/workspace/:workspaceId", authMiddleware, getChannelByWorkspace);
 
+/**
+ * @swagger
+ * /api/v1/channel/delete/{channelId}:
+ *   delete:
+ *     summary: Delete a channel
+ *     tags: [Channel]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: channelId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The channel ID
+ *     responses:
+ *       200:
+ *         description: Channel deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Channel deleted successfully"
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden (Not an admin/owner)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Channel not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 router.delete("/delete/:channelId", authMiddleware, deleteChannel);
 
 export default router;

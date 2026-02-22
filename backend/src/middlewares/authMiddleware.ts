@@ -4,7 +4,7 @@ import { AuthRequest } from "../types/authRequest";
 
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
-  console.log("AUTH HEADER 👉", req.headers.authorization);
+  // console.log("AUTH HEADER 👉", req.headers.authorization);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No token" });

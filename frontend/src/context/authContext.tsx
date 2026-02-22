@@ -3,13 +3,13 @@ import { LoginApi, SignupApi } from "../api/auth.api";
 import { getProfileApi } from "../api/user.api";
 import { setToken as storeToken, getToken, removeToken } from "../utils/storage";
 
-type UserType = {
+export type UserType = {
   _id?: string;
   name: string;
   email: string;
 };
 
-type AuthContextType = {
+export type AuthContextType = {
   isAuthenticated: boolean;
   user: UserType | null;
   loading: boolean;

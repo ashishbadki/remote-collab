@@ -1,12 +1,13 @@
 import axios from "axios";
 import { getToken } from "../utils/storage";
+import { ENDPOINTS } from "../constants/endpoints";
 
-const API_URL = "http://localhost:3000/api/v1/channel";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getChannelsByWorkspaceApi = async (workspaceId: string) => {
     const token = getToken();
 
-    const { data } = await axios.get(`${API_URL}/workspace/${workspaceId}`, {
+    const { data } = await axios.get(`${API_BASE_URL}${ENDPOINTS.CHANNEL.BY_WORKSPACE(workspaceId)}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -19,7 +20,7 @@ export const createChannelApi = async (workspaceId: string, name: string) => {
     const token = getToken();
 
     const { data } = await axios.post(
-        `${API_URL}/create/${workspaceId}`,
+        `${API_BASE_URL}${ENDPOINTS.CHANNEL.CREATE(workspaceId)}`,
         { name },
         {
             headers: {
@@ -34,7 +35,7 @@ export const createChannelApi = async (workspaceId: string, name: string) => {
 export const deleteChannelApi = async (channelId: string) => {
     const token = getToken();
 
-    const { data } = await axios.delete(`${API_URL}/delete/${channelId}`, {
+    const { data } = await axios.delete(`${API_BASE_URL}${ENDPOINTS.CHANNEL.DELETE(channelId)}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

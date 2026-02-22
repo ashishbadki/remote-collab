@@ -1,6 +1,7 @@
 import axios from "axios";
+import { ENDPOINTS } from "../constants/endpoints";
 
-const API_URL = "http://localhost:3000/api/v1/auth";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const SignupApi = async (
   name: string,
@@ -8,8 +9,8 @@ export const SignupApi = async (
   password: string,
   confirmPassword: string
 ) => {
-  try{
-    const { data } = await axios.post(`${API_URL}/signup`, {
+  try {
+    const { data } = await axios.post(`${API_BASE_URL}${ENDPOINTS.AUTH.SIGNUP}`, {
       name,
       email,
       password,
@@ -17,18 +18,18 @@ export const SignupApi = async (
     });
 
     return data;
-  } 
-  catch (error: any){
+  }
+  catch (error: any) {
     throw error;
   }
 };
 
 
-export const LoginApi = async (email: string, password: string) =>{
-    const { data } = await axios.post(`${API_URL}/login`,{
-      email,
-      password
-    })
-    return data;
+export const LoginApi = async (email: string, password: string) => {
+  const { data } = await axios.post(`${API_BASE_URL}${ENDPOINTS.AUTH.LOGIN}`, {
+    email,
+    password
+  })
+  return data;
 
 }

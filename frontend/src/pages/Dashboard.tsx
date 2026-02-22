@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
 import CreateWorkspace from "../components/CreateWorkspace";
 import WorkspaceList from "../components/allWorkspaceList";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext";
 import { getAllWorkspacesApi, deleteWorkspaceApi, joinWorkspaceApi } from "../api/workspace.api";
 import type { Workspace } from "../types/workspace";
 
@@ -113,6 +113,24 @@ const Dashboard = () => {
             <CreateWorkspace onCreated={fetchWorkspaces} />
 
 
+            <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-50 pb-3 mb-4 flex items-center gap-2">
+                <svg className="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2" />
+                </svg>
+                Workspace Insights
+              </h3>
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div className="p-3 rounded-xl bg-indigo-50/50">
+                  <div className="text-xl font-bold text-indigo-700">{stats.totalMembers}</div>
+                  <div className="text-[10px] font-medium text-indigo-600 uppercase tracking-wider">Members</div>
+                </div>
+                <div className="p-3 rounded-xl bg-purple-50/50">
+                  <div className="text-xl font-bold text-purple-700">{stats.totalChannels}</div>
+                  <div className="text-[10px] font-medium text-purple-600 uppercase tracking-wider">Channels</div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="lg:col-span-2">

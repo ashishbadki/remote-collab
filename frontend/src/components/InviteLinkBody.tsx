@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
-import { getToken } from "../utils/storage";
+import { generateInviteApi } from "../api/invite.api";
 
 export const InviteLinkBody = ({
   workspaceId,
@@ -17,17 +16,9 @@ export const InviteLinkBody = ({
       setLoading(true);
       console.log("Generating invite for workspaceId:", workspaceId);
 
-      const res = await axios.post(
-        `http://localhost:3000/api/v1/invite/${workspaceId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-        }
-      );
-      console.log("Invite response:", res.data);
-      const fullLink = res.data.inviteLink;
+      const data = await generateInviteApi(workspaceId);
+      console.log("Invite response:", data);
+      const fullLink = data.inviteLink;
       const token = fullLink.split("/").pop();
       setInviteLink(token);
     } catch (err: any) {

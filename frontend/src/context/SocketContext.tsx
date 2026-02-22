@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
-import { useAuth } from './authContext';
+import { createContext, useContext, useEffect, useState, useRef } from 'react';
+import type { ReactNode } from 'react';
+import { useAuth } from './AuthContext';
 
 type Message = {
     sender: string;
@@ -39,7 +40,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
         }
 
         // Initialize WebSocket
-        const wsUrl = `ws://localhost:3000?token=${token}`;
+        const socketBaseUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:3000';
+        const wsUrl = `${socketBaseUrl}?token=${token}`;
         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {

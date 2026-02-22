@@ -4,13 +4,14 @@ import { ENDPOINTS } from "../constants/endpoints";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getProfileApi = async () => {
+export const generateInviteApi = async (workspaceId: string) => {
     const token = getToken();
 
-    const { data } = await axios.get(`${API_BASE_URL}${ENDPOINTS.USER.PROFILE}`, {
+    const { data } = await axios.post(`${API_BASE_URL}${ENDPOINTS.INVITE.GENERATE(workspaceId)}`, {}, {
         headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
     return data;
-}
+};
