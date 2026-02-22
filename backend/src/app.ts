@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes";
 import workspaceRoutes from "./routes/workspaceRoutes";
 import inviteRoutes from "./routes/inviteRoutes";
 import channelRoutes from "./routes/channelRoutes";
+import messageRoutes from "./routes/message.route";
 
 const app = express();
 
@@ -41,4 +42,5 @@ import swaggerSpec from "./config/swagger";
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use("/api/v1/messages", messageRoutes);
 export default app;

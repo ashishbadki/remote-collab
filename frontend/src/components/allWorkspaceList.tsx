@@ -1,5 +1,6 @@
 // components/allWorkspaceList.tsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { InviteLinkBody } from "./InviteLinkBody";
 import { useAuth } from "../context/authContext";
@@ -17,6 +18,7 @@ const WorkspaceList = ({
   onDelete,
 }: WorkspaceListProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -216,9 +218,10 @@ const WorkspaceList = ({
                   </div>
                 </div>
 
-                {/* Action Button */}
-                {/* Action Button */}
-                <button>
+                <button
+                  onClick={() => navigate(`/workspace/${ws._id}`)}
+                  className="mt-6 w-full rounded-xl bg-gray-900 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-800 hover:shadow-md active:scale-[0.98]"
+                >
                   Open Workspace
                 </button>
 

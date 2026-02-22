@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 // Create a new channel
 export const createChannel = async (req: AuthRequest, res: Response) => {
-    try{
+    try {
         const workspaceId = String(req.params.workspaceId);
 
         const workspaceExist = await Workspace.findOne({ _id: workspaceId });
@@ -19,12 +19,14 @@ export const createChannel = async (req: AuthRequest, res: Response) => {
         }
 
         const isOwner = workspaceExist.owner.toString() === req.userId;
-        const isMember = workspaceExist.members.some((member) => member.userId?.toString() === req.userId);
+        const isAdmin = workspaceExist.members.some(
+            (member) => member.userId?.toString() === req.userId && member.role === "admin"
+        );
 
-        if (!isOwner && !isMember) {
+        if (!isOwner && !isAdmin) {
             return res.status(403).json({
                 success: false,
-                message: "Forbidden: You are not a member of this workspace",
+                message: "Forbidden: You do not have permission to create channels",
             });
         }
 
@@ -42,11 +44,58 @@ export const createChannel = async (req: AuthRequest, res: Response) => {
             channel,
         });
     }
-    catch(error){
+    catch (error) {
         console.error("Create channel error:", error);
         return res.status(500).json({
             success: false,
             message: "Failed to create channel",
+        });
+    }
+}
+
+export const deleteChannel = async (req: AuthRequest, res: Response) => {
+    try {
+        const channelId = req.params.channelId;
+        const channel = await Channel.findById(channelId);
+
+        if (!channel) {
+            return res.status(404).json({
+                success: false,
+                message: "Channel not found",
+            });
+        }
+
+        const workspace = await Workspace.findById(channel.workspace);
+        if (!workspace) {
+            return res.status(404).json({
+                success: false,
+                message: "Workspace not found",
+            });
+        }
+
+        const isOwner = workspace.owner.toString() === req.userId;
+        const isAdmin = workspace.members.some(
+            (member) => member.userId?.toString() === req.userId && member.role === "admin"
+        );
+
+        if (!isOwner && !isAdmin) {
+            return res.status(403).json({
+                success: false,
+                message: "Forbidden: You do not have permission to delete channels",
+            });
+        }
+
+        await Channel.findByIdAndDelete(channelId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Channel deleted successfully",
+        });
+    } catch (error) {
+        console.error("Delete channel error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete channel",
         });
     }
 }
@@ -58,7 +107,7 @@ export const getChannelByWorkspace = async (req: AuthRequest, res: Response) => 
 
         const userId = req.userId;
 
-        if(!mongoose.Types.ObjectId.isValid(workspaceId)){
+        if (!mongoose.Types.ObjectId.isValid(workspaceId)) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid workspace ID",
@@ -67,7 +116,7 @@ export const getChannelByWorkspace = async (req: AuthRequest, res: Response) => 
 
         const workspace = await Workspace.findById(workspaceId);
 
-        if(!workspace){
+        if (!workspace) {
             return res.status(404).json({
                 success: false,
                 message: "Workspace not found",
@@ -78,7 +127,7 @@ export const getChannelByWorkspace = async (req: AuthRequest, res: Response) => 
 
         const isMember = workspace.members.some((member) => member.userId?.toString() === userId);
 
-        if(!isOwner && !isMember){
+        if (!isOwner && !isMember) {
             return res.status(403).json({
                 success: false,
                 message: "Forbidden: You are not a member of this workspace",
@@ -92,9 +141,9 @@ export const getChannelByWorkspace = async (req: AuthRequest, res: Response) => 
             channels,
         });
     }
-    catch(error){
+    catch (error) {
         console.error("Get channels error:", error);
-        return res.status(500).json({   
+        return res.status(500).json({
             success: false,
             message: "Failed to fetch channels",
         });

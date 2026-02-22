@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { createWorkspace, getAllWorkspace, deleteWorkspace } from "../controllers/workspaceController";
+import { createWorkspace, getAllWorkspace, deleteWorkspace, getWorkspaceById } from "../controllers/workspaceController";
 
 const router = Router();
+
+
 
 /**
  * @swagger
@@ -148,6 +150,7 @@ router.get("/my", authMiddleware, getAllWorkspace);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+router.get("/:workspaceId", authMiddleware, getWorkspaceById);
 router.delete("/:workspaceId", authMiddleware, deleteWorkspace)
 
 export default router;
