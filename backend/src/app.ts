@@ -34,4 +34,11 @@ app.use("/api/v1/workspace", workspaceRoutes);
 app.use("/api/v1/invite", inviteRoutes);
 
 app.use("/api/v1/channel", channelRoutes);
+
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger";
+
+// Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 export default app;
