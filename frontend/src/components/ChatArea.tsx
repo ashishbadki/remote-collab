@@ -3,6 +3,7 @@ import { useSocket } from "../context/SocketContext";
 import { useAuth } from "../context/authContext";
 import axios from "axios";
 import { deleteMessageApi } from "../api/message.api";
+import { Search, MoreVertical, Phone, Video, Smile, Paperclip, Mic, Send, CheckCheck, Trash2 } from "lucide-react";
 
 type ChatAreaProps = {
     channelName?: string;
@@ -16,7 +17,7 @@ type Message = {
     sender: {
         _id: string;
         name: string;
-    } | string; // sender can be object populate from DB or string ID from socket
+    } | string;
     message: string;
     createdAt?: string;
 };
@@ -60,11 +61,7 @@ export const ChatArea = ({ channelName, channelId, workspaceId, canDeleteAnyMess
     useEffect(() => {
         const lastMessage = socketMessages[socketMessages.length - 1];
         if (lastMessage && lastMessage.channelId === channelId) {
-            // Check if message already exists to prevent duplicates if any
             setMessages((prev) => {
-                // If the message is from self (optimistically added) we might get it back from socket
-                // For now, simpler to just append. 
-                // In a real app we'd handle deduplication by temp ID.
                 return [...prev, {
                     sender: lastMessage.sender,
                     message: lastMessage.message,
@@ -84,19 +81,6 @@ export const ChatArea = ({ channelName, channelId, workspaceId, canDeleteAnyMess
         if (!newMessage.trim() || !channelId || !workspaceId) return;
 
         sendMessage(workspaceId, channelId, newMessage);
-
-        // Optimistic update
-        /* 
-        // Commented out to rely on socket echo for now to avoid duplications without temp IDs
-        setMessages((prev) => [
-            ...prev,
-            {
-                sender: { _id: user?._id || "", username: user?.username || "You" },
-                message: newMessage,
-                createdAt: new Date().toISOString(),
-            },
-        ]);
-        */
         setNewMessage("");
     };
 
@@ -113,76 +97,123 @@ export const ChatArea = ({ channelName, channelId, workspaceId, canDeleteAnyMess
 
     if (!channelName) {
         return (
-            <div className="flex h-full flex-1 flex-col items-center justify-center bg-white text-gray-500">
-                <div className="mb-4 rounded-full bg-gray-100 p-6">
-                    <svg
-                        className="h-12 w-12 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                        />
-                    </svg>
+            <div className="flex h-full flex-1 flex-col items-center justify-center bg-[#f0f2f5] text-gray-500 border-l border-gray-300">
+                <div className="mb-4">
+                    {/* WhatsApp Intro Art Placeholder */}
+                    <div className="w-64 h-64 bg-gray-200 rounded-full flex items-center justify-center mb-6 mx-auto opacity-50">
+                        <span className="text-4xl">👋</span>
+                    </div>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900">Welcome to the Workspace</h3>
-                <p className="max-w-md text-center text-sm">
-                    Select a channel from the sidebar to start chatting or create a new one to get discussions going.
+                <h3 className="text-3xl font-light text-gray-600 mb-4">Welcome to RemoteCollab</h3>
+                <p className="max-w-md text-center text-sm text-gray-400">
+                    Send and receive messages without keeping your phone online.
+                    <br />
+                    Use RemoteCollab on up to 4 linked devices and 1 phone.
                 </p>
+                <div className="mt-8 text-xs text-gray-400 flex items-center gap-1">
+                    <span className="opacity-60">🔒</span> End-to-end encrypted
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="flex h-full flex-1 flex-col bg-white">
+        <div className="flex h-full flex-1 flex-col bg-[#efeae2] relative">
+            {/* Background Pattern Overlay (Optional) */}
+            <div className="absolute inset-0 opacity-5 pointer-events-none"
+                style={{ backgroundImage: "url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')" }}>
+            </div>
+
             {/* Header */}
-            <div className="flex h-16 items-center justify-between border-b border-gray-200 px-6">
-                <div className="flex items-center gap-2">
-                    <span className="text-2xl text-gray-400">#</span>
-                    <h2 className="text-lg font-bold text-gray-900">{channelName}</h2>
+            <div className="flex px-4 py-2.5 items-center justify-between bg-[#f0f2f5] border-l border-gray-300 z-10">
+                <div className="flex items-center gap-4 cursor-pointer">
+                    <div className="relative">
+                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                            {/* Initials Avatar */}
+                            <span className="text-gray-600 font-medium text-lg">
+                                {channelName.charAt(0).toUpperCase()}
+                            </span>
+                        </div>
+                        {/* Online Status Dot */}
+                        <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white"></div>
+                    </div>
+                    <div className="flex flex-col">
+                        <h2 className="text-base font-medium text-gray-900 leading-tight">#{channelName}</h2>
+                        <span className="text-xs text-gray-500 leading-tight">click here for channel info</span>
+                    </div>
                 </div>
-                {/* ... existing header content ... */}
+
+                <div className="flex items-center gap-6 text-gray-500">
+                    <button className="hover:bg-gray-200 p-2 rounded-full transition-colors">
+                        <Video className="h-5 w-5" />
+                    </button>
+                    <button className="hover:bg-gray-200 p-2 rounded-full transition-colors">
+                        <Phone className="h-5 w-5" />
+                    </button>
+                    <div className="w-[1px] h-6 bg-gray-300 mx-1"></div>
+                    <button className="hover:bg-gray-200 p-2 rounded-full transition-colors">
+                        <Search className="h-5 w-5" />
+                    </button>
+                    <button className="hover:bg-gray-200 p-2 rounded-full transition-colors">
+                        <MoreVertical className="h-5 w-5" />
+                    </button>
+                </div>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-6">
-                <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 z-10 sm:px-10 custom-scrollbar">
+                <div className="space-y-1">
                     {messages.map((msg, index) => {
                         const isMe = typeof msg.sender === 'string' ? msg.sender === user?._id : msg.sender._id === user?._id;
-                        // Determine if the user can delete this specific message
-                        // Logic: They are the sender OR they have admin/owner privileges (canDeleteAnyMessage)
                         const canDelete = isMe || canDeleteAnyMessage;
-
                         const senderName = typeof msg.sender === 'string' ? 'User' : (msg.sender.name || 'Unknown');
+                        const time = msg.createdAt ? new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
 
                         return (
-                            <div key={index} className={`group flex items-start gap-4 ${isMe ? 'flex-row-reverse' : ''}`}>
-                                <div className={`h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center ${isMe ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-600'}`}>
-                                    {senderName.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div className={`flex items-baseline gap-2 ${isMe ? 'justify-end' : ''}`}>
-                                        <span className="font-bold text-gray-900">{isMe ? 'You' : senderName}</span>
-                                        <span className="text-xs text-gray-500">
-                                            {msg.createdAt && new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            <div key={index} className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'} group mb-1`}>
+                                <div className={`relative max-w-[65%] sm:max-w-[50%] px-2 py-1.5 rounded-lg shadow-sm text-sm 
+                                    ${isMe
+                                        ? 'bg-[#d9fdd3] rounded-tr-none'
+                                        : 'bg-white rounded-tl-none'
+                                    }`}>
+
+                                    {/* Sender Name in Group Chat (only for received messages) */}
+                                    {!isMe && (
+                                        <div className="text-xs font-medium text-orange-400 mb-0.5 px-1">
+                                            {senderName}
+                                        </div>
+                                    )}
+
+                                    <div className="px-1 relative pb-4 min-w-[80px]">
+                                        <span className="text-[#111b21] text-[14.2px] leading-[19px] break-words whitespace-pre-wrap">
+                                            {msg.message}
                                         </span>
-                                        {canDelete && (
-                                            <button
-                                                onClick={() => handleDeleteMessage(msg._id!)}
-                                                className="ml-2 rounded p-1 text-gray-400 opacity-0 transition-all hover:bg-red-50 hover:text-red-500 group-hover:opacity-100"
-                                                title="Delete Message"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        )}
+
+                                        {/* Timestamp & Status */}
+                                        <div className="absolute bottom-0 right-0 flex items-center gap-1 text-[11px] text-gray-500 select-none opacity-70">
+                                            <span>{time}</span>
+                                            {isMe && (
+                                                <CheckCheck className="h-4 w-4 text-blue-500" />
+                                            )}
+                                        </div>
                                     </div>
-                                    <p className={`text-gray-800 ${isMe ? 'text-right' : ''}`}>{msg.message}</p>
+
+                                    {/* Hover Delete Button */}
+                                    {canDelete && (
+                                        <button
+                                            onClick={() => handleDeleteMessage(msg._id!)}
+                                            className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/50 rounded-bl-lg hover:bg-red-50 hover:text-red-500"
+                                            title="Delete Message"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                        </button>
+                                    )}
+
+                                    {/* Triangle Tail */}
+                                    <div className={`absolute top-0 w-3 h-3 overflow-hidden ${isMe ? '-right-2' : '-left-2'}`}>
+                                        <div className={`w-4 h-4 transform rotate-45 origin-bottom-left ${isMe ? 'bg-[#d9fdd3] translate-y-[2px] -translate-x-2' : 'bg-white translate-y-[2px] translate-x-1.5'}`}></div>
+                                    </div>
+
                                 </div>
                             </div>
                         );
@@ -192,30 +223,38 @@ export const ChatArea = ({ channelName, channelId, workspaceId, canDeleteAnyMess
             </div>
 
             {/* Input Area */}
-            <div className="p-4">
-                <div className="rounded-xl border border-gray-200 bg-white shadow-sm ring-1 ring-black/5">
-                    {/* ... existing input toolbar ... */}
+            <div className="bg-[#f0f2f5] px-4 py-3 flex items-center gap-4 z-10 border-l border-gray-300">
+                <button className="text-gray-500 hover:text-gray-600">
+                    <Smile className="h-6 w-6" />
+                </button>
+                <button className="text-gray-500 hover:text-gray-600">
+                    <Paperclip className="h-5 w-5" />
+                </button>
+
+                <div className="flex-1 bg-white rounded-lg px-4 py-2 flex items-center">
                     <input
                         type="text"
-                        className="w-full bg-transparent p-3 placeholder-gray-400 focus:outline-none"
-                        placeholder={`Message #${channelName}`}
+                        className="flex-1 bg-transparent border-none outline-none text-[#111b21] placeholder-gray-500 text-[15px]"
+                        placeholder="Type a message"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                     />
-                    <div className="flex items-center justify-between p-2">
-                        <div className="text-xs text-gray-400">
-                            <strong>Return</strong> to send
-                        </div>
+                </div>
+
+                <div className="flex items-center justify-center">
+                    {newMessage.trim() ? (
                         <button
                             onClick={handleSendMessage}
-                            className="rounded p-1.5 text-indigo-500 hover:bg-indigo-50"
+                            className="text-[#00a884] hover:text-[#008f72] p-2 rounded-full transition-all"
                         >
-                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
+                            <Send className="h-6 w-6" />
                         </button>
-                    </div>
+                    ) : (
+                        <button className="text-gray-500 hover:text-gray-600 p-2 rounded-full">
+                            <Mic className="h-6 w-6" />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
