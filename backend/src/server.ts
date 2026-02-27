@@ -1,8 +1,4 @@
-  import app from "./app";
-
-
-
-
+import app from "./app";
 import http from "http";
 import { initChatSocket } from "./sockets/chat.socket";
 
