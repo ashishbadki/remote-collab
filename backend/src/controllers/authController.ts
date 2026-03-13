@@ -53,7 +53,7 @@ export const signup = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
+      { expiresIn: "30d" }
     );
 
     return res.status(201).json({
@@ -114,7 +114,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
+      { expiresIn: "30d" }
     );
 
     // ✅ 5. RESPONSE (VERY IMPORTANT)

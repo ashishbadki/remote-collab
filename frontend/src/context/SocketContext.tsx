@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { isTokenExpired } from '../utils/storage';
 
 type Message = {
     sender: string;
@@ -19,7 +20,7 @@ type SocketContextType = {
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-    const { token, user } = useAuth();
+    const { token, user, logout } = useAuth();
     const [socket, setSocket] = useState<WebSocket | null>(null); // Use state for socket
     const [isConnected, setIsConnected] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -36,6 +37,12 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
                 setSocket(null);
                 setIsConnected(false);
             }
+            return;
+        }
+
+        if (isTokenExpired(token)) {
+            console.log('Token expired, logging out');
+            logout();
             return;
         }
 
