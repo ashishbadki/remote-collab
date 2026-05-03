@@ -1,22 +1,23 @@
 import crypto from 'crypto';
-import { buffer } from 'stream/consumers';
 
 const algorithm = 'aes-256-cbc';
-const secretKey = process.env.CHAT_SECRET_KEY as string;
+const iv = Buffer.alloc(16, 0);
 
-const key = crypto.createHash('sha256').update(secretKey).digest();
+function getKey(): Buffer {
+    const secretKey = process.env.CHAT_SECRET_KEY;
+    if (!secretKey) throw new Error('CHAT_SECRET_KEY is not set in environment');
+    return crypto.createHash('sha256').update(secretKey).digest();
+}
 
-const iv = Buffer.alloc(16, 0); 
-
-export function encryptMessage(message: string){
-    const ciper = crypto.createCipheriv(algorithm, key, iv);
+export function encryptMessage(message: string) {
+    const ciper = crypto.createCipheriv(algorithm, getKey(), iv);
     let encrypted = ciper.update(message, 'utf8', 'hex');
     encrypted += ciper.final('hex');
     return encrypted;
 }
 
-export function decryptMessage(encryptedMessage: string){
-    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+export function decryptMessage(encryptedMessage: string) {
+    const decipher = crypto.createDecipheriv(algorithm, getKey(), iv);
     let decrypted = decipher.update(encryptedMessage, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
