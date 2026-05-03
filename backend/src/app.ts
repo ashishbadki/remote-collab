@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./config/swagger";
+import swaggerSpec from "./config/swagger.js";
 
-import { connectDB } from "./config/db";
+import { connectDB } from "./config/db.js";
 
-import authRoutes from "./routes/authRoutes";
-import userRoutes from "./routes/userRoutes";
-import workspaceRoutes from "./routes/workspaceRoutes";
-import inviteRoutes from "./routes/inviteRoutes";
-import channelRoutes from "./routes/channelRoutes";
-import messageRoutes from "./routes/message.route";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import workspaceRoutes from "./routes/workspaceRoutes.js";
+import inviteRoutes from "./routes/inviteRoutes.js";
+import channelRoutes from "./routes/channelRoutes.js";
+import messageRoutes from "./routes/message.route.js";
 
 const app = express();
 
