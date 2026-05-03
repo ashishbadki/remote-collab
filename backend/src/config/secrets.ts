@@ -1,14 +1,5 @@
 import AWS from "aws-sdk";
-import path from "path";
-
 const getSecrets = async () => {
-  // ✅ Local development — use .env file, skip AWS
-  if (process.env.NODE_ENV !== "production") {
-    require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
-    console.log("✅ Secrets loaded from .env (local dev mode)");
-    return;
-  }
-
   // 🚀 Production — fetch from AWS Secrets Manager
   const client = new AWS.SecretsManager({
     region: "ap-south-1",

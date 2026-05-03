@@ -1,17 +1,24 @@
 import http from "http";
 import type { Application } from "express";
-import { initChatSocket } from "./sockets/chat.socket";
-import getSecrets from "./config/secrets";
-import app from "./app";
-import { connectDB } from "./config/db";
 
 (async () => {
-  await getSecrets(); // 🔥 sabse pehle secrets load
+  // 🔥 Load environment variables first
+  if (process.env.NODE_ENV === "production") {
+    const getSecrets = (await import("./config/secrets")).default;
+    await getSecrets();
+  } else {
+    require("dotenv").config();
+    console.log("✅ Secrets loaded from .env (local dev mode)");
+  }
+
+  // 🚀 Import modules after environment is set
+  const { connectDB } = await import("./config/db");
+  const app = (await import("./app")).default;
+  const { initChatSocket } = await import("./sockets/chat.socket");
 
   await connectDB(); // ✅ DB connect after secrets
 
   const server = http.createServer(app as unknown as Application);
-
   initChatSocket(server);
 
   const PORT = process.env.PORT || 3000;
