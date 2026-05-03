@@ -7,12 +7,16 @@ const options: Options = {
         info: {
             title: 'Remote Collab API',
             version: '1.0.0',
-            description: '### API documentation for Remote Collab application\n[http://localhost:3000/swagger.json](http://localhost:3000/swagger.json)',
+            description: '### API documentation for Remote Collab application\n[https://api.remcollab.site/swagger.json](https://api.remcollab.site/swagger.json)',
         },
         servers: [
             {
+                url: 'https://api.remcollab.site',
+                description: 'Production server',
+            },
+            {
                 url: 'http://localhost:3000',
-                description: 'Development server',
+                description: 'Local development server',
             },
         ],
         components: {

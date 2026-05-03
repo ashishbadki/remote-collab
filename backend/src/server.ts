@@ -1,11 +1,23 @@
-import app from "./app";
 import http from "http";
+import type { Application } from "express";
 import { initChatSocket } from "./sockets/chat.socket";
+import getSecrets from "./config/secrets";
+import app from "./app";
+import { connectDB } from "./config/db";
 
-const server = http.createServer(app);
+(async () => {
+  await getSecrets(); // 🔥 sabse pehle secrets load
 
-initChatSocket(server);
+  await connectDB(); // ✅ DB connect after secrets
 
-server.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+  const server = http.createServer(app as unknown as Application);
+
+  initChatSocket(server);
+
+  const PORT = process.env.PORT || 3000;
+
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Swagger UI available at http://localhost:${PORT}/api-docs`);
+  });
+})();
