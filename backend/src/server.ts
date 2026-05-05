@@ -4,7 +4,7 @@ import type { Application } from "express";
 (async () => {
   // 🔥 Load environment variables first
   if (process.env.NODE_ENV === "production") {
-    const { default: getSecrets } = await import("./config/secrets.js");
+    const getSecrets = require("./config/secrets").default;
     await (getSecrets as unknown as () => Promise<void>)();
   } else {
     require("dotenv").config();
@@ -12,9 +12,9 @@ import type { Application } from "express";
   }
 
   // 🚀 Import modules after environment is set
-  const { connectDB } = await import("./config/db.js");
-  const { default: app } = await import("./app.js");
-  const { initChatSocket } = await import("./sockets/chat.socket.js");
+  const { connectDB } = require("./config/db");
+  const app = require("./app").default;
+  const { initChatSocket } = require("./sockets/chat.socket");
 
   await connectDB(); // ✅ DB connect after secrets
 
