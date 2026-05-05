@@ -1,16 +1,12 @@
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
 COPY package*.json ./
-
 RUN npm install
 
 COPY . .
 
-# 🔥 BUILD STEP (VERY IMPORTANT)
-RUN npm run build
-
-EXPOSE 5000
+RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build
 
 CMD ["npm", "start"]
