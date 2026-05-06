@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { AuthRequest } from "../types/authRequest";
-import Workspace from "../models/createWorkspaceModel";
+import { AuthRequest } from "../types/authRequest.js";
+import Workspace from "../models/createWorkspaceModel.js";
 
 // Create a new workspace
 export const createWorkspace = async (req: AuthRequest, res: Response) => {

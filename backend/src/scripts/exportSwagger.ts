@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import swaggerSpec from '../config/swagger';
+import swaggerSpec from '../config/swagger.js';
 
 const outputPath = path.resolve(__dirname, '../../swagger.json');
 

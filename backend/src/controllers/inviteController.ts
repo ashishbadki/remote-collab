@@ -1,8 +1,8 @@
 import { Response } from "express";
-import { AuthRequest } from "../types/authRequest";
-import Invite from "../models/invite.model";
-import User from "../models/userModel";
-import Workspace from "../models/createWorkspaceModel";
+import { AuthRequest } from "../types/authRequest.js";
+import Invite from "../models/invite.model.js";
+import User from "../models/userModel.js";
+import Workspace from "../models/createWorkspaceModel.js";
 
 // Create an invite
 export const createInvite = async (req: AuthRequest, res: Response) => {

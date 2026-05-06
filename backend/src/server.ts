@@ -7,7 +7,8 @@ import type { Application } from "express";
     const { default: getSecrets } = await import("./config/secrets.js");
     await (getSecrets as unknown as () => Promise<void>)();
   } else {
-    require("dotenv").config();
+    const dotenv = await import("dotenv");
+    dotenv.default.config();
     console.log("✅ Secrets loaded from .env (local dev mode)");
   }
 

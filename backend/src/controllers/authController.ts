@@ -1,7 +1,7 @@
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import bcrypt from "bcrypt";
 
 export const signup = async (req: Request, res: Response) => {

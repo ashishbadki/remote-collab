@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authMiddleware } from "../middlewares/authMiddleware";
-import { getMessages, deleteMessage } from "../controllers/messageController";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
+import { getMessages, deleteMessage } from "../controllers/messageController.js";
 
 /**
  * @swagger
