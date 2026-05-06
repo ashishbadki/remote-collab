@@ -25,6 +25,7 @@ app.use(
       "http://localhost:3001",
       "https://remcollab.site",
       "https://api.remcollab.site",
+      "http://172.21.192.1:5173",
     ],
     credentials: true,
   })
@@ -47,4 +48,4 @@ app.get("/swagger.json", (req, res) => {
 
 app.use("/api/v1/messages", messageRoutes);
 
-export default app;
+export default app;
