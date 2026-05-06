@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { AuthRequest } from "../types/authRequest";
-import Channel from "../models/channel.model";
-import Workspace from "../models/createWorkspaceModel";
+import { AuthRequest } from "../types/authRequest.js";
+import Channel from "../models/channel.model.js";
+import Workspace from "../models/createWorkspaceModel.js";
 import mongoose from "mongoose";
 
 // Create a new channel

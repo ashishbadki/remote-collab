@@ -1,7 +1,7 @@
 import { WebSocketServer, WebSocket } from "ws";
-import Message from "../models/message.model";
-import { encryptMessage } from "../utils/encyption";
-import { verifySocketToken } from "../middlewares/wsAuth";
+import Message from "../models/message.model.js";
+import { encryptMessage } from "../utils/encyption.js";
+import { verifySocketToken } from "../middlewares/wsAuth.js";
 
 interface ExtendedWebSocket extends WebSocket {
   userId?: string;

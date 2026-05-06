@@ -1,16 +1,16 @@
 import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "./config/swagger";
+import swaggerSpec from "./config/swagger.js";
 
-import { connectDB } from "./config/db";
+import { connectDB } from "./config/db.js";
 
-import authRoutes from "./routes/authRoutes";
-import userRoutes from "./routes/userRoutes";
-import workspaceRoutes from "./routes/workspaceRoutes";
-import inviteRoutes from "./routes/inviteRoutes";
-import channelRoutes from "./routes/channelRoutes";
-import messageRoutes from "./routes/message.route";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import workspaceRoutes from "./routes/workspaceRoutes.js";
+import inviteRoutes from "./routes/inviteRoutes.js";
+import channelRoutes from "./routes/channelRoutes.js";
+import messageRoutes from "./routes/message.route.js";
 
 const app = express();
 
@@ -19,13 +19,13 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
+      "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:3000",
       "http://localhost:3001",
       "https://remcollab.site",
       "https://api.remcollab.site",
       "http://172.21.192.1:5173",
-      
     ],
     credentials: true,
   })
